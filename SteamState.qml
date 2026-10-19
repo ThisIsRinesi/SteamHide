@@ -11,7 +11,7 @@ Singleton {
 
   readonly property int stateOnline: 1
   readonly property int stateInvisible: 7
-  readonly property string helper: Qt.resolvedUrl("steam-status-toggle").toString().replace(/^file:\/\//, "")
+  readonly property string helper: Qt.resolvedUrl("steam-hide").toString().replace(/^file:\/\//, "")
 
   property bool steamRunning: false
   property int personaState: -1

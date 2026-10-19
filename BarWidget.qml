@@ -6,13 +6,13 @@ import qs.Ui
 
 BarWidget {
   id: root
-  moduleName: "io.github.michaelsucks.steam-status-toggle"
+  moduleName: "io.github.michaelsucks.steam-hide"
 
   implicitWidth: button.implicitWidth
   implicitHeight: button.implicitHeight
 
   IpcHandler {
-    target: "io.github.michaelsucks.steam-status-toggle"
+    target: "io.github.michaelsucks.steam-hide"
 
     function toggle(): void {
       SteamState.toggle()

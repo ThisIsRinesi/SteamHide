@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "id": "io.github.michaelsucks.steam-status-toggle",
-  "name": "Steam Status Toggle",
+  "id": "io.github.michaelsucks.steam-hide",
+  "name": "Steam Hide",
   "version": "1.0.0",
   "author": "Michael Tran",
   "description": "One-click toggle between invisible and online on Steam, right from the bar.",
@@ -12,7 +12,7 @@
     "barWidget": "BarWidget.qml"
   },
   "barWidget": {
-    "displayName": "Steam Status Toggle",
+    "displayName": "Steam Hide",
     "description": "One-click toggle between invisible and online on Steam.",
     "category": "Gaming",
     "defaultSection": "right",

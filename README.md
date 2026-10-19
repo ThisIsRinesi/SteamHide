@@ -1,8 +1,8 @@
-# Steam Status Toggle
+# Steam Hide
 
 An [Omarchy](https://omarchy.org/) bar widget that switches your Steam friends status between **Online** and **Invisible** with one click.
 
-![Steam Status Toggle](preview.png)
+![Steam Hide](preview.png)
 
 ## Features
 
@@ -15,7 +15,7 @@ An [Omarchy](https://omarchy.org/) bar widget that switches your Steam friends s
 ## Install
 
 ```bash
-omarchy plugin add https://github.com/michaelsucks/SteamStatusToggle --enable
+omarchy plugin add https://github.com/michaelsucks/SteamHide --enable
 ```
 
 ## Usage
@@ -27,17 +27,17 @@ Click the icon in the bar to toggle. Hover it to see your current status.
 While the widget is on the bar it exposes an IPC target, so you can bind it to a key in `~/.config/hypr/bindings.lua`:
 
 ```bash
-omarchy-shell io.github.michaelsucks.steam-status-toggle toggle
-omarchy-shell io.github.michaelsucks.steam-status-toggle refresh
+omarchy-shell io.github.michaelsucks.steam-hide toggle
+omarchy-shell io.github.michaelsucks.steam-hide refresh
 ```
 
 The bundled helper script also works on its own, from the plugin folder:
 
 ```bash
-./steam-status-toggle status     # prints "<running> <state>", e.g. "1 7"
-./steam-status-toggle online
-./steam-status-toggle invisible
-./steam-status-toggle toggle
+./steam-hide status     # prints "<running> <state>", e.g. "1 7"
+./steam-hide online
+./steam-hide invisible
+./steam-hide toggle
 ```
 
 ## How it works

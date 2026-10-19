@@ -1,12 +1,12 @@
 #!/bin/bash
 # Read or change your Steam friends status.
 #
-#   steam-status-toggle status     prints "<running> <state>", e.g. "1 7"
-#                                  running: 1 if the Steam client is up, else 0
-#                                  state:   Steam ePersonaState (1 online, 7 invisible), or -1 if unknown
-#   steam-status-toggle invisible  go invisible
-#   steam-status-toggle online     go online
-#   steam-status-toggle toggle     flip between the two
+#   steam-hide status     prints "<running> <state>", e.g. "1 7"
+#                         running: 1 if the Steam client is up, else 0
+#                         state:   Steam ePersonaState (1 online, 7 invisible), or -1 if unknown
+#   steam-hide invisible  go invisible
+#   steam-hide online     go online
+#   steam-hide toggle     flip between the two
 
 STEAM_DIRS=(
   "$HOME/.local/share/Steam"
@@ -59,7 +59,7 @@ case "$1" in
     if [[ $(current_state) == 7 ]]; then "$0" online; else "$0" invisible; fi
     ;;
   *)
-    echo "Usage: steam-status-toggle {status|invisible|online|toggle}" >&2
+    echo "Usage: steam-hide {status|invisible|online|toggle}" >&2
     exit 1
     ;;
 esac
