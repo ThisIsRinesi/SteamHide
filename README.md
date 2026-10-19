@@ -18,6 +18,14 @@ An [Omarchy](https://omarchy.org/) bar widget that switches your Steam friends s
 omarchy plugin add https://github.com/michaelsucks/SteamHide --enable
 ```
 
+## Remove
+
+```bash
+omarchy plugin remove io.github.michaelsucks.steam-hide
+```
+
+This takes the widget off the bar and deletes the plugin folder. The plugin never changes Steam's files or your other config.
+
 ## Usage
 
 Click the icon in the bar to toggle. Hover it to see your current status.
