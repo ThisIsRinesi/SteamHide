@@ -15,7 +15,7 @@ An [Omarchy](https://omarchy.org/) bar widget that switches your Steam friends s
 ## Install
 
 ```bash
-omarchy plugin add https://github.com/michaelsucks/steam-status-toggle --enable
+omarchy plugin add https://github.com/michaelsucks/SteamStatusToggle --enable
 ```
 
 ## Usage
