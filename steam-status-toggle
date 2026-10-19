@@ -1,0 +1,65 @@
+#!/bin/bash
+# Read or change your Steam friends status.
+#
+#   steam-status-toggle status     prints "<running> <state>", e.g. "1 7"
+#                                  running: 1 if the Steam client is up, else 0
+#                                  state:   Steam ePersonaState (1 online, 7 invisible), or -1 if unknown
+#   steam-status-toggle invisible  go invisible
+#   steam-status-toggle online     go online
+#   steam-status-toggle toggle     flip between the two
+
+STEAM_DIRS=(
+  "$HOME/.local/share/Steam"
+  "$HOME/.steam/steam"
+  "$HOME/.var/app/com.valvesoftware.Steam/.local/share/Steam"
+)
+
+steam_running() {
+  pgrep -x steam >/dev/null || pgrep -x steamwebhelper >/dev/null
+}
+
+# Most recently written localconfig.vdf belongs to the signed-in account.
+current_state() {
+  local dir file newest="" newest_time=0 time
+  for dir in "${STEAM_DIRS[@]}"; do
+    for file in "$dir"/userdata/*/config/localconfig.vdf; do
+      [[ -f $file ]] || continue
+      time=$(stat -c %Y "$file")
+      (( time > newest_time )) && newest=$file newest_time=$time
+    done
+  done
+  [[ -n $newest ]] || { echo -1; return; }
+  grep -o 'FriendStoreLocalPrefs_[0-9]*"[^}]*ePersonaState\\":[0-9]*' "$newest" |
+    grep -o '[0-9]*$' | head -n1 | grep . || echo -1
+}
+
+open_url() {
+  if command -v steam >/dev/null; then
+    steam "$1" >/dev/null 2>&1 &
+  elif flatpak info com.valvesoftware.Steam >/dev/null 2>&1; then
+    flatpak run com.valvesoftware.Steam "$1" >/dev/null 2>&1 &
+  else
+    echo "Steam is not installed" >&2
+    exit 1
+  fi
+  disown
+}
+
+case "$1" in
+  status)
+    steam_running && running=1 || running=0
+    echo "$running $(current_state)"
+    ;;
+  invisible|online)
+    steam_running || { echo "Steam is not running" >&2; exit 1; }
+    open_url "steam://friends/status/$1"
+    ;;
+  toggle)
+    steam_running || { echo "Steam is not running" >&2; exit 1; }
+    if [[ $(current_state) == 7 ]]; then "$0" online; else "$0" invisible; fi
+    ;;
+  *)
+    echo "Usage: steam-status-toggle {status|invisible|online|toggle}" >&2
+    exit 1
+    ;;
+esac

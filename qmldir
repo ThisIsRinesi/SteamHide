@@ -1,0 +1,2 @@
+singleton SteamState 1.0 SteamState.qml
+SteamIcon 1.0 SteamIcon.qml
