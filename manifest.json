@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "io.github.michaelsucks.steam-hide",
   "name": "Steam Hide",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Michael Tran",
   "description": "One-click toggle between invisible and online on Steam, right from the bar.",
   "kinds": [
