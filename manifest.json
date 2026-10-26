@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "io.github.michaelsucks.steam-hide",
-  "name": "Steam Hide",
-  "version": "1.0.1",
-  "author": "Michael Tran",
-  "description": "One-click toggle between invisible and online on Steam, right from the bar.",
+  "id": "io.github.thisisrinesi.presence-hide",
+  "name": "Presence Hide",
+  "version": "2.0.0",
+  "author": "ThisIsRinesi (based on Michael Tran\u2019s Steam Hide)",
+  "description": "Synchronize Steam and Discord visibility with indefinite invisibility.",
   "kinds": [
     "bar-widget"
   ],
@@ -12,8 +12,8 @@
     "barWidget": "BarWidget.qml"
   },
   "barWidget": {
-    "displayName": "Steam Hide",
-    "description": "One-click toggle between invisible and online on Steam.",
+    "displayName": "Presence Hide",
+    "description": "Synchronize Steam and Discord visibility with indefinite invisibility.",
     "category": "Gaming",
     "defaultSection": "right",
     "allowMultiple": false

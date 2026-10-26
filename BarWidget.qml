@@ -6,13 +6,13 @@ import qs.Ui
 
 BarWidget {
   id: root
-  moduleName: "io.github.michaelsucks.steam-hide"
+  moduleName: "io.github.thisisrinesi.presence-hide"
 
   implicitWidth: button.implicitWidth
   implicitHeight: button.implicitHeight
 
   IpcHandler {
-    target: "io.github.michaelsucks.steam-hide"
+    target: "io.github.thisisrinesi.presence-hide"
 
     function toggle(): void {
       SteamState.toggle()
@@ -27,7 +27,7 @@ BarWidget {
     id: button
     anchors.fill: parent
     bar: root.bar
-    active: SteamState.steamRunning && SteamState.invisible
+    active: SteamState.available && SteamState.invisible
     // Steam logo while online; the crossed-out eye glyph while invisible.
     text: SteamState.invisible ? "󰈉" : ""
     iconComponent: SteamState.invisible ? null : steamIcon
@@ -42,10 +42,8 @@ BarWidget {
         }
       }
     }
-    dimmed: !SteamState.steamRunning
-    tooltipText: !SteamState.steamRunning ? "Steam is not running"
-      : SteamState.invisible ? "Steam: Invisible (click to go online)"
-      : "Steam: Online (click to go invisible)"
+    dimmed: !SteamState.available
+    tooltipText: SteamState.tooltip
     onPressed: SteamState.toggle()
   }
 }

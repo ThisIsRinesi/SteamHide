@@ -1,0 +1,9 @@
+{
+  "tooltip": "Steam: %1\nDiscord: %2%3%4\nClick to %5",
+  "notRunning": "not running",
+  "notConnected": "not connected",
+  "applying": "Applying status…",
+  "goOnline": "go online",
+  "goInvisible": "go invisible (Forever)",
+  "invalidResponse": "Invalid service response"
+}

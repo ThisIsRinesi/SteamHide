@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+import net from 'node:net';
+import { socketPath } from './paths.mjs';
+const command = process.argv[2] || 'status';
+if (!['status', 'toggle', 'online', 'invisible', 'refresh'].includes(command)) {
+  console.error('Usage: presence-hide {status|toggle|online|invisible|refresh}'); process.exit(1);
+}
+const client = net.createConnection(socketPath);
+client.setEncoding('utf8');
+let output = '';
+const timer = setTimeout(() => { client.destroy(); fail('Presence Hide timed out'); }, 30000);
+function fail(error) {
+  clearTimeout(timer);
+  console.log(JSON.stringify({ steam: null, discord: null, target: null, pending: false, error }));
+  process.exitCode = 1;
+}
+client.on('connect', () => client.write(command + '\n'));
+client.on('data', chunk => { output += chunk; if (output.length > 8192) client.destroy(new Error('Invalid response')); });
+client.on('end', () => { clearTimeout(timer); console.log(output.trim()); });
+client.on('error', () => fail('Presence Hide service unavailable'));

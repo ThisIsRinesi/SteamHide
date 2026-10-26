@@ -2,80 +2,59 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import qs.Commons as Commons
 
-// One shared view of Steam's status. Every widget and indicator copy binds
-// to this, so a click updates all of them at once instead of each waiting
-// for its own poll.
 Singleton {
   id: root
+  Commons.Translations { id: strings; directory: Qt.resolvedUrl("i18n") }
+  readonly property string helper: decodeURIComponent(Qt.resolvedUrl("presence-hide").toString().replace(/^file:\/\//, ""))
+  property string steamStatus: ""
+  property string discordStatus: ""
+  property string targetStatus: ""
+  property string error: ""
+  property bool pending: false
+  readonly property bool available: steamStatus !== "" || discordStatus !== ""
+  readonly property bool invisible: targetStatus === "invisible"
+  readonly property string tooltip: strings.t("tooltip")
+    .arg(steamStatus || strings.t("notRunning"))
+    .arg(discordStatus || strings.t("notConnected"))
+    .arg(pending ? "\n" + strings.t("applying") : "")
+    .arg(error ? "\n" + error : "")
+    .arg(invisible ? strings.t("goOnline") : strings.t("goInvisible"))
 
-  readonly property int stateOnline: 1
-  readonly property int stateInvisible: 7
-  readonly property string helper: decodeURIComponent(Qt.resolvedUrl("steam-hide").toString().replace(/^file:\/\//, ""))
-
-  property bool steamRunning: false
-  property int personaState: -1
-  readonly property bool invisible: personaState === stateInvisible
-
-  // After a click Steam takes a moment to save the new status; until it
-  // does (or we give up), ignore polls that still report the old one so the
-  // icon doesn't flick back and forth.
-  property int pendingState: -1
-
+  function accept(text) {
+    try {
+      var status = JSON.parse(text)
+      steamStatus = status.steam || ""
+      discordStatus = status.discord || ""
+      targetStatus = status.target || ""
+      error = status.error || ""
+      pending = status.pending === true
+    } catch (e) { error = strings.t("invalidResponse") }
+  }
   function refresh() {
-    if (!statusProc.running) statusProc.running = true
+    if (!statusProc.running && !toggleProc.running) statusProc.running = true
   }
-
   function toggle() {
-    if (!steamRunning) return
-    pendingState = invisible ? stateOnline : stateInvisible
-    personaState = pendingState
-    // The helper reads Steam's saved status itself, so it always sends the
-    // right command even if our view is stale.
-    Quickshell.execDetached([helper, "toggle"])
-    pendingTimeout.restart()
-    confirmTimer.restart()
+    if (!available || toggleProc.running) return
+    pending = true
+    toggleProc.running = true
   }
-
   Process {
     id: statusProc
     command: [root.helper, "status"]
-    stdout: StdioCollector {
-      onStreamFinished: {
-        var parts = text.trim().split(" ")
-        var state = parts.length > 1 ? parseInt(parts[1], 10) : -1
-        root.steamRunning = parts[0] === "1"
-        if (root.pendingState !== -1) {
-          if (state !== root.pendingState) return
-          root.pendingState = -1
-          pendingTimeout.stop()
-        }
-        root.personaState = state
-      }
-    }
+    stdout: StdioCollector { onStreamFinished: root.accept(text) }
   }
-
+  Process {
+    id: toggleProc
+    command: [root.helper, "toggle"]
+    stdout: StdioCollector { onStreamFinished: root.accept(text) }
+  }
   Timer {
-    interval: 3000
+    interval: 2000
     running: true
     repeat: true
     triggeredOnStart: true
     onTriggered: root.refresh()
-  }
-
-  // Poll sooner after a click so the confirmation lands quickly.
-  Timer {
-    id: confirmTimer
-    interval: 1000
-    onTriggered: root.refresh()
-  }
-
-  Timer {
-    id: pendingTimeout
-    interval: 8000
-    onTriggered: {
-      root.pendingState = -1
-      root.refresh()
-    }
   }
 }
